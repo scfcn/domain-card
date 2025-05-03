@@ -12,9 +12,12 @@
             --primary: #FF7F66;
             --accent: #FFAA66;
             --dark: rgba(25, 25, 35, 0.95);
+            --light: rgba(245, 245, 255, 0.95);
             --success: #4CAF50;
             --info: #2196F3;
             --warning: #FF9800;
+            --text-dark: #FFF;
+            --text-light: #333;
         }
         * {
             box-sizing: border-box;
@@ -30,9 +33,13 @@
                         url('https://scdn.星.fun/AcgnPic/') center/cover fixed;
             margin: 0;
             padding: 20px;
-            color: #FFF;
+            color: var(--text-dark);
             font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
             line-height: 1.6;
+            transition: color 0.5s ease;
+        }
+        body.light-mode {
+            color: var(--text-light);
         }
         .card {
             background: var(--dark);
@@ -44,6 +51,11 @@
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.15);
             animation: cardEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.5s ease;
+        }
+        body.light-mode .card {
+            background: var(--light);
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
         h1 {
             font-size: clamp(1.8rem, 5vw, 2.2rem);
@@ -63,6 +75,10 @@
             background: rgba(255, 255, 255, 0.05);
             border-radius: 0.8rem;
             word-break: break-all;
+            transition: all 0.5s ease;
+        }
+        body.light-mode .domain-display {
+            background: rgba(0, 0, 0, 0.05);
         }
         .contacts {
             margin-top: 2rem;
@@ -77,9 +93,15 @@
             border-radius: 0.8rem;
             transition: all 0.3s ease;
         }
+        body.light-mode .contact-item {
+            background: rgba(0, 0, 0, 0.05);
+        }
         .contact-item:hover {
             transform: translateX(8px);
             background: rgba(255, 255, 255, 0.1);
+        }
+        body.light-mode .contact-item:hover {
+            background: rgba(0, 0, 0, 0.1);
         }
         .icon {
             width: 28px;
@@ -129,6 +151,9 @@
             flex-direction: column;
             align-items: center;
         }
+        body.light-mode .service-card {
+            background: rgba(0, 0, 0, 0.05);
+        }
         .service-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
@@ -145,6 +170,7 @@
         .cloudflare { color: #F38020; }
         .vercel { color: #000000; }
         .github { color: #ffffff; }
+        body.light-mode .github { color: #000000; }
         .service-title {
             font-weight: bold;
             margin-bottom: 0.4rem;
@@ -157,6 +183,9 @@
         .btn-container {
             width: 100%;
             margin-top: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
         }
         .details-btn {
             display: block;
@@ -175,6 +204,58 @@
         .details-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(255, 127, 102, 0.4);
+        }
+        .project-btn {
+            display: block;
+            padding: 0.7rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent);
+            border-radius: 0.5rem;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-size: 0.95rem;
+            border: 1px solid rgba(255, 170, 102, 0.3);
+        }
+        body.light-mode .project-btn {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        .project-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 170, 102, 0.2);
+            background: rgba(255, 170, 102, 0.1);
+        }
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--dark);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        body.light-mode .theme-toggle {
+            background: var(--light);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+        .theme-toggle i {
+            color: var(--accent);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
         }
         @keyframes cardEntrance {
             from {
@@ -204,6 +285,10 @@
     </style>
 </head>
 <body>
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </div>
+    
     <div class="card">
         <h1>域名所有权声明</h1>    
         <div class="domain-display">
@@ -235,6 +320,16 @@
         <div class="btn-container">
             <a href="https://who.cx/" class="details-btn" target="_blank" rel="noopener noreferrer">
                 查看域名详细信息
+            </a>
+            <!-- 项目链接区域 -->
+            <a href="https://domain.govs.xin/" class="project-btn" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-rocket"></i> 雾都云信网公益
+            </a>
+            <a href="https://icp.govs.xin/" class="project-btn" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-code"></i> 信网虚拟备案中心
+            </a>
+            <a href="https://icp.scfc.top/" class="project-btn" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-paint-brush"></i> 雾ICP备案中心
             </a>
         </div>
         <div class="contacts">
@@ -270,6 +365,38 @@
 
             return hostParts[1] ? `${hostParts[1]}.${hostParts[0]}` : hostParts[0];
         }
+        
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggle');
+            const icon = themeToggle.querySelector('i');
+            
+            body.classList.toggle('light-mode');
+            
+            if (body.classList.contains('light-mode')) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('theme', 'light');
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggle');
+            const icon = themeToggle.querySelector('i');
+            
+            if (savedTheme === 'light') {
+                body.classList.add('light-mode');
+                icon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                body.classList.remove('light-mode');
+                icon.classList.replace('fa-sun', 'fa-moon');
+            }
+        }
+        
         document.addEventListener('DOMContentLoaded', () => {
             try {
                 const rootDomain = parseRootDomain();
@@ -277,6 +404,12 @@
                 document.title = `${rootDomain} - 域名信息`;
                 const detailsBtn = document.querySelector('.details-btn');
                 detailsBtn.href = `https://who.cx/${encodeURIComponent(rootDomain)}`;
+                
+                // 加载主题
+                loadTheme();
+                
+                // 添加主题切换事件
+                document.getElementById('themeToggle').addEventListener('click', toggleTheme);
             } catch (e) {
                 console.error('Domain parse error:', e);
                 document.getElementById('rootDomain').textContent = '域名解析失败';

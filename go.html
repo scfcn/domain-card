@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline' 'self'; connect-src 'none';">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="//cdn.staticfile.net/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css" media="all">
+    <title>安全中心</title>
+    <style>
+        body,html{padding:0;margin:0}
+        body{background:#f5f6f7;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif}
+        a{cursor:default;text-decoration:none;word-wrap:break-word;word-break:break-all}
+        .wiiuii-go-main{display:flex;width:100%;height:100%;justify-content:center;align-items:center}
+        .wiiuii-go-container{position: relative;max-width:28em;height:auto;display:inline-block;background:#fff;margin:10px;padding:1.5em;border-radius:5px;box-shadow:0 0 10px rgba(116,116,116,.1)}
+        .wiiuii-go-content a{color:#036af4}
+        .wiiuii-go-content a:hover{color:#e91e63}
+        .wiiuii-go-logo{text-align:center;width:auto;height:65px;margin-bottom:10px}
+        .wiiuii-go-logo img{max-width:100%;height:100%}
+        .wiiuii-go-msg{cursor:default;text-align:center;padding:10px 5px;font-weight:700;color:rgba(255, 0, 0, 0.85);background:rgba(255, 0, 0, 0.1);border-radius:5px}
+        .wiiuii-go-button-item{text-align:right}
+        .wiiuii-go-button{display:inline-block;border-radius:99px;padding:10px 15px;background:rgba(116,116,116,.1);transition:all .5s}
+        .wiiuii-go-button a{font-weight:700;font-size:14px;color:#333}
+        .wiiuii-go-button:hover{color:#000;background:rgba(116,116,116,.2)}
+        .wiiuii-goid-item{position:absolute;top:10px;left:10px;border-radius:4px;overflow:hidden;background:#ffd07c}
+        .wiiuii-goid-title{padding:0 4px;background:#ffa400}
+        .wiiuii-goid-text{padding-right:5px}
+        .wiiuii-go-container hr{border: 0;height: 0.05em;background: #eee;}
+    </style>
+</head>
+
+<body>
+    <div class="wiiuii-go-main">
+        <div class="wiiuii-go-container">
+            <div class="wiiuii-goid-item">
+                <b class="wiiuii-goid-title">GID</b>
+                <span class="wiiuii-goid-text" id="linkId">LINK</span>
+            </div>
+            <br />
+            <div class="wiiuii-go-logo">
+                <!-- Replace with your logo image -->
+                <img src="./logo.png" alt="Logo">
+            </div>
+            <div class="wiiuii-go-content">
+                <div class="wiiuii-go-msg">
+                    <span><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> 您即将离开本站，请注意您的账号和财产安全。</span>
+                </div>
+                <p>访问链接：<a id="targetLink" title="" onclick="location.replace('')"></a></p>
+            </div>
+            <hr>
+            <div class="wiiuii-go-button-item">
+                <div class="wiiuii-go-button">
+                    <a id="homeLink" onclick="location.replace('')">返回首页</a>
+                </div>
+                <div class="wiiuii-go-button">
+                    <a id="continueLink" onclick="location.replace('')">继续访问 <span style="font-weight: bold; color: red;" id="countdown"></span>秒</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Parse URL from query string
+        function getUrlFromQuery() {
+            const query = window.location.search.substring(1);
+            const params = new URLSearchParams(query);
+            let url = params.get('url') || '';
+            
+            // Check if URL is base64 encoded
+            try {
+                if (url && url === btoa(atob(url))) {
+                    url = atob(url);
+                }
+            } catch(e) {
+                console.log('Not base64 encoded');
+            }
+            
+            // Validate URL
+            if (!url) return window.location.host;
+            
+            const urlPattern = /^(http|https|thunder|qqdl|ed2k|Flashget|qbrowser):\/\//i;
+            if (urlPattern.test(url)) {
+                return url;
+            }
+            
+            if (url.includes('.')) {
+                return 'https://' + url;
+            }
+            
+            return window.location.host;
+        }
+
+        // Main function
+        function init() {
+            const targetUrl = getUrlFromQuery();
+            const currentHost = window.location.host;
+            const siteName = document.title.split(' - ')[0] || '本站';
+            
+            // Update page elements
+            document.getElementById('targetLink').textContent = targetUrl;
+            document.getElementById('targetLink').href = targetUrl;
+            document.getElementById('targetLink').setAttribute('onclick', `location.replace('${targetUrl}')`);
+            document.getElementById('targetLink').setAttribute('title', targetUrl);
+            
+            document.getElementById('continueLink').setAttribute('onclick', `location.replace('${targetUrl}')`);
+            document.getElementById('homeLink').setAttribute('onclick', `location.replace('//${currentHost}')`);
+            
+            document.querySelector('.wiiuii-go-msg span').innerHTML = 
+                `<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> 您即将离开${siteName}，请注意您的账号和财产安全。`;
+            
+            // Generate a simple ID for the link
+            document.getElementById('linkId').textContent = 'LINK' + targetUrl.length;
+            
+            // Start countdown
+            startCountdown(5, document.getElementById('countdown'));
+        }
+
+        function link_jump() {
+            var MyHOST = new RegExp(window.location.host);
+            if (!MyHOST.test(document.referrer)) {
+                location.href = "/" + MyHOST;
+            }
+            location.href = document.getElementById('targetLink').href;
+        }
+
+        function startCountdown(duration, display) {
+            var timer = duration, seconds;
+            setInterval(function () {
+                seconds = parseInt(timer % 60, 10);
+                display.textContent = seconds;
+                if (--timer < 0) {
+                    timer = duration;
+                    link_jump();
+                }
+            }, 1000);
+        }
+
+        // 延时50S关闭跳转页面，用于文件下载后不会关闭跳转页的问题
+        setTimeout(function() {
+            window.opener = null;
+            window.close();
+        }, 50000);
+
+        // Initialize when page loads
+        window.onload = function() {
+            init();
+        };
+    </script>
+</body>
+</html>
